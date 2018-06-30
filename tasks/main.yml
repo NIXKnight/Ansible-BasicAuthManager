@@ -1,2 +1,82 @@
 ---
 # tasks file for Ansible-BasicAuthManager
+- name: Install Prequisites
+  apt:
+    update_cache: yes
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+      - python-virtualenv
+      - supervisor
+  when: ansible_os_family == 'Debian'
+
+- name: Create Group for Application User
+  group:
+    name: "{{ BAM_USER }}"
+
+- name: Create Application User
+  user:
+    name: "{{ BAM_USER }}"
+    group: "{{ BAM_USER }}"
+    home: "{{ BAM_HOME }}"
+    state: present
+    create_home: yes
+    shell: /bin/false
+
+- name: Checkout BasicAuthManager Repo into {{ BAM_CODE_DIR }}
+  git:
+    repo: "{{ bam_repo }}"
+    version: "{{ bam_version }}"
+    dest: "{{ BAM_CODE_DIR }}"
+  become_user: "{{ BAM_USER }}"
+
+- name: Create {{ bam_config_file }}
+  template:
+    src: templates/bam.cfg.j2
+    dest: "{{ bam_config_file }}"
+    owner: "{{ BAM_USER }}"
+    group: "{{ BAM_USER }}"
+    mode: 0600
+
+- name: Create Environment for BasicAuthManager and Install Requirements
+  pip:
+    requirements: "{{ BAM_REQUIREMENTS_FILE }}"
+    virtualenv: "{{ BAM_VIRTUALENV_DIR }}"
+  become_user: "{{ BAM_USER }}"
+
+- name: Create Credentials File for Basic Authentication
+  htpasswd:
+    path: "{{ BAM_HTPASSWD_FILE }}"
+    name: "{{ BAM_ADMIN }}"
+    password: "{{ BAM_ADMIN_PASSWORD }}"
+    owner: "{{ BAM_USER }}"
+    group: "{{ WEBSRV_GROUP_NAME }}"
+    mode: 0640
+    crypt_scheme: "bcrypt"
+  vars:
+    ansible_python_interpreter: "{{ BAM_VIRTUALENV_DIR }}/bin/python"
+
+- name: Create Supervisor Configuration File
+  template:
+    src: templates/bam-supervisor.cfg.j2
+    dest: "{{ BAM_SUPERVISOR_CONFIG_PATH }}"
+  notify: Restart Supervisor
+
+- name: Start BasicAuthManager with Supervisor
+  supervisorctl:
+    name: BasicAuthManager
+    state: restarted
+  notify: Restart NGINX
+
+- name: Add BasicAuthManager NGINX Server Block
+  template:
+    src: bam-nginx-server-block.conf.j2
+    dest: "{{ BAM_WEBSRV_CONF_FILE }}"
+
+- name: Enable BasicAuthManager NGINX Server Block
+  file:
+    src: "{{ BAM_WEBSRV_CONF_FILE }}"
+    dest: "{{ BAM_WEBSRV_ENABLED_CONF_FILE }}"
+    state: link
+  notify: Restart NGINX
+  

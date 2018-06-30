@@ -1,2 +1,7 @@
 ---
 # vars file for Ansible-BasicAuthManager
+bam_repo: "https://github.com/NIXKnight/BasicAuthManager.git"
+bam_version: "master"
+bam_requirements: "{{ BAM_CODE_DIR }}"
+bam_config_file: "{{ BAM_CODE_DIR }}/config.cfg"
+bam_htpasswd_file: "{{ BAM_CODE_DIR }}/htpasswd"

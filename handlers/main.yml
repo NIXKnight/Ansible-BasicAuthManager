@@ -1,2 +1,11 @@
 ---
 # handlers file for Ansible-BasicAuthManager
+- name: Restart NGINX
+  service:
+    name: nginx
+    state: restarted
+
+- name: Restart Supervisor
+  service:
+    name: supervisor
+    state: restarted

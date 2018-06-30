@@ -1,0 +1,9 @@
+[program:BasicAuthManager]
+user = {{ BAM_USER }}
+directory = {{ BAM_CODE_DIR }}
+command = {{ BAM_VIRTUALENV_DIR }}/bin/gunicorn BasicAuthManager:app -w 4 -b {{ BAM_GUNICORN_IP }}:{{ BAM_GUNICORN_PORT }}
+environment = PRODUCTION=1
+redirect_stderr = True
+autorestart = True
+stdout_logfile = /var/log/supervisor/BasicAuthManager_stdout.log
+stderr_logfile = /var/log/supervisor/BasicAuthManager_stderr.log
