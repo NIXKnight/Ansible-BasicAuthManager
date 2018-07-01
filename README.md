@@ -2,7 +2,9 @@
 Ansible-BasicAuthManager in an Ansible role for setting up [BasicAuthManager](https://github.com/NIXKnight/BasicAuthManager).
 
 ## **Requirements**
-At the moment this role is being written for Debian based distributions e.g. Debian/Ubuntu. It may evolve to include other major distributions. The role installs `virtualenv` and `supervisor` packages. Thsi role assumes that you have NGINX installed.
+At the moment this role is being written for Debian based distributions e.g. Debian/Ubuntu. It may evolve to include other major distributions. The role installs `virtualenv` and `supervisor` packages. This role assumes that you have NGINX installed.
+
+It is also assued that you have `allow_world_readable_tmpfiles = True` in your `ansible.cfg`.
 
 ## **Role Variables**
 * `BAM_USER` Sets username of the application. By default this is set to `bam`.
