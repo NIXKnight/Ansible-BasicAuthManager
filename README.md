@@ -4,16 +4,16 @@ Ansible-BasicAuthManager in an Ansible role for setting up [BasicAuthManager](ht
 ## **Requirements**
 At the moment this role is being written for Debian based distributions e.g. Debian/Ubuntu. It may evolve to include other major distributions. The role installs `virtualenv` and `supervisor` packages. This role assumes that you have NGINX installed.
 
-It is also assued that you have `allow_world_readable_tmpfiles = True` in your `ansible.cfg`.
+It is also assumed that you have `allow_world_readable_tmpfiles = True` in your `ansible.cfg`.
 
 ## **Role Variables**
 * `BAM_USER` Sets username of the application. By default this is set to `bam`.
 * `BAM_HOME` Home directory for the user set in `BAM_USER`. By default its set to `/opt/bam`.
-* `BAM_CODE_DIR` Directory where BasicAuthManager code will reside. By defaults its set to use a directory named `BasicAuthManager` in home directory which is defined in `BAM_HOME`.
+* `BAM_CODE_DIR` Directory where BasicAuthManager code will reside. By default its set to use a directory named `BasicAuthManager` in home directory which is defined in `BAM_HOME`.
 * `BAM_VIRTUALENV_DIR` Directory where a python virtual environment for BasicAuthManager will reside. By default its set to `venv` directory in home directory as defined in `BAM_HOME`.
 * `BAM_SUPERVISOR_CONFIG_PATH` Path on the server for supervisor configuration for BasicAuthManager.
 * `BAM_DOMAIN_NAME` Domain/Subdomain name that will be used to setup `server_name` in NGINX server block.
-* `BAM_ADMIN` Admin user of basicAuthManager. This user has rights to create or remove users.
+* `BAM_ADMIN` Admin user of BasicAuthManager. This user has rights to create or remove users.
 * `BAM_ADMIN_PASSWORD` Password for Admin user.
 * `BAM_HTPASSWD_FILE` Path on the server for Htpasswd file. By default its set to htpasswd in `BAM_HOME`.
 * `WEBSRV_GROUP_NAME` Web server group name. This is used to set read permission for `BAM_HTPASSWD_FILE`. By default its set to `www-data`.
