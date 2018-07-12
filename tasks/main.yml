@@ -52,7 +52,7 @@
     owner: "{{ BAM_USER }}"
     group: "{{ WEBSRV_GROUP_NAME }}"
     mode: 0640
-    crypt_scheme: "bcrypt"
+    crypt_scheme: "sha256_crypt"
   vars:
     ansible_python_interpreter: "{{ BAM_VIRTUALENV_DIR }}/bin/python"
 
