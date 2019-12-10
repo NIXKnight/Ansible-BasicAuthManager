@@ -42,6 +42,7 @@
   pip:
     requirements: "{{ BAM_REQUIREMENTS_FILE }}"
     virtualenv: "{{ BAM_VIRTUALENV_DIR }}"
+    virtualenv_python: "{{ BAM_VENV_PYTHON }}"
   become_user: "{{ BAM_USER }}"
 
 - name: Create Credentials File for Basic Authentication
